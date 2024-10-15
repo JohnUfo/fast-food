@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.payload;
+package fast_food_website.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.security;
+package fast_food_website.security;
 
 
 import jakarta.servlet.FilterChain;
@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uz.muydinovs.fast_food_website.service.AuthService;
+import fast_food_website.service.AuthService;
 
 import java.io.IOException;
 

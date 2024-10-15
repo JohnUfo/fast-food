@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.config;
+package fast_food_website.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import uz.muydinovs.fast_food_website.security.JwtFilter;
-import uz.muydinovs.fast_food_website.service.AuthService;
+import fast_food_website.security.JwtFilter;
+import fast_food_website.service.AuthService;
 
 import java.util.Properties;
 

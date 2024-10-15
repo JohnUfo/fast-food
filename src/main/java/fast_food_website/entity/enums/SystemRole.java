@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.entity.enums;
+package fast_food_website.entity.enums;
 
 public enum SystemRole {
     SYSTEM_ROLE_ADMIN,

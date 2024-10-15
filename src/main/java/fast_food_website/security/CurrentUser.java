@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.security;
+package fast_food_website.security;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

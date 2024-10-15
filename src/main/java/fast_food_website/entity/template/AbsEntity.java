@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.entity.template;
+package fast_food_website.entity.template;
 
 
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uz.muydinovs.fast_food_website.entity.User;
+import fast_food_website.entity.User;
 
 import java.security.Timestamp;
 import java.util.UUID;

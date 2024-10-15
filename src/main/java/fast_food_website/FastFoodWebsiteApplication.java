@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website;
+package fast_food_website;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

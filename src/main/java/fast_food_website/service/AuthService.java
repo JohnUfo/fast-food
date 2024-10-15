@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.service;
+package fast_food_website.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -10,11 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.muydinovs.fast_food_website.entity.User;
-import uz.muydinovs.fast_food_website.entity.enums.SystemRole;
-import uz.muydinovs.fast_food_website.payload.ApiResponse;
-import uz.muydinovs.fast_food_website.payload.RegisterDto;
-import uz.muydinovs.fast_food_website.repository.UserRepository;
+import fast_food_website.entity.User;
+import fast_food_website.entity.enums.SystemRole;
+import fast_food_website.payload.ApiResponse;
+import fast_food_website.payload.RegisterDto;
+import fast_food_website.repository.UserRepository;
 
 
 import java.util.Optional;
@@ -30,7 +30,7 @@ public class AuthService implements UserDetailsService {
 
     @Lazy
     @Autowired
-    public AuthService(uz.muydinovs.fast_food_website.repository.UserRepository userRepository, PasswordEncoder passwordEncoder, JavaMailSender javaMailSender, AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JavaMailSender javaMailSender, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.javaMailSender = javaMailSender;

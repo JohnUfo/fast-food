@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.security;
+package fast_food_website.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

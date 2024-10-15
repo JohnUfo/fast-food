@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.entity;
+package fast_food_website.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

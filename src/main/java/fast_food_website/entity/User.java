@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.entity;
+package fast_food_website.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import uz.muydinovs.fast_food_website.entity.enums.SystemRole;
-import uz.muydinovs.fast_food_website.entity.template.AbsEntity;
+import fast_food_website.entity.enums.SystemRole;
+import fast_food_website.entity.template.AbsEntity;
 
 import java.sql.Timestamp;
 import java.util.Collection;

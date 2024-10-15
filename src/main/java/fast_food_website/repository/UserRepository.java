@@ -1,8 +1,8 @@
-package uz.muydinovs.fast_food_website.repository;
+package fast_food_website.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import uz.muydinovs.fast_food_website.entity.User;
+import fast_food_website.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;

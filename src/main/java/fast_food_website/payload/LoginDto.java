@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.payload;
+package fast_food_website.payload;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

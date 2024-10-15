@@ -1,4 +1,4 @@
-package uz.muydinovs.fast_food_website.payload;
+package fast_food_website.payload;
 
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
