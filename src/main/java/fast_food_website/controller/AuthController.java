@@ -1,27 +1,68 @@
 package fast_food_website.controller;
 
+import fast_food_website.entity.User;
 import fast_food_website.payload.ApiResponse;
 import fast_food_website.payload.RegisterDto;
+import fast_food_website.security.JwtProvider;
 import fast_food_website.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
     AuthService authService;
+    AuthenticationManager authenticationManager;
+    JwtProvider jwtProvider;
+
+    @Autowired
+    @Lazy
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
+        this.authService = authService;
+        this.authenticationManager = authenticationManager;
+        this.jwtProvider = jwtProvider;
+    }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model, String errorMessage) {
+        model.addAttribute("errorMessage", errorMessage);
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam String email,
+                        @RequestParam String password,
+                        HttpServletRequest request,
+                        RedirectAttributes redirectAttributes) {
+        try {
+            Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password)
+            );
+
+            User user = (User) authenticate.getPrincipal();
+
+            String token = jwtProvider.generateToken(user.getEmail());
+
+            HttpSession session = request.getSession();
+            session.setAttribute("JWT_TOKEN", token);
+            session.setAttribute("USER_EMAIL", user.getEmail());
+
+            return "redirect:/";
+        } catch (Exception e) {
+            redirectAttributes.addAttribute("errorMessage", "Invalid email or password");
+            return "redirect:/auth/login";
+        }
     }
 
     @GetMapping("/register")
@@ -57,6 +98,7 @@ public class AuthController {
                               RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = authService.verifyEmail(verificationCode, email);
         if (apiResponse.isSuccess()) {
+
             return "login";
         } else {
             redirectAttributes.addAttribute("errorMessage", "Invalid email code. Please try again.");

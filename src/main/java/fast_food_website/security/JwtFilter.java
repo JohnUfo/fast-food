@@ -1,6 +1,6 @@
 package fast_food_website.security;
 
-
+import fast_food_website.service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import fast_food_website.service.AuthService;
 
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("auth");
+        String authorizationHeader = request.getHeader("authorization");
         System.out.println("Authorization Header: " + authorizationHeader);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -37,6 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 System.out.println("Authenticated Username: " + email);
                 UserDetails userDetails = authService.loadUserByUsername(email);
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+
             }
         } else {
             System.out.println("No token found");

@@ -6,14 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Product extends AbsEntity {
+public class Food extends AbsEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -21,6 +20,8 @@ public class Product extends AbsEntity {
     private Double price;
 
     private String description;
+
+    private int count;
 
     @ManyToOne
     private Category category;

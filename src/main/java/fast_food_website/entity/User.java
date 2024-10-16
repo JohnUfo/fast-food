@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import fast_food_website.entity.enums.SystemRole;
 import fast_food_website.entity.template.AbsEntity;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -37,7 +35,11 @@ public class User extends AbsEntity implements UserDetails {
     private String emailCode;
 
     @Enumerated(EnumType.STRING)
-    private SystemRole systemRole;
+    @ManyToMany
+    private Set<SystemRole> systemRole;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Basket basket;
 
     private boolean enabled = false;
     private boolean accountNonExpired = true;
@@ -50,7 +52,7 @@ public class User extends AbsEntity implements UserDetails {
         this.initialLetter = fullName.substring(0, 1);
     }
 
-    public User(String fullName, String password, String email, String emailCode, SystemRole systemRole) {
+    public User(String fullName, String password, String email, String emailCode, Set<SystemRole> systemRole) {
         this.fullName = fullName;
         this.password = password;
         this.email = email;
@@ -60,8 +62,7 @@ public class User extends AbsEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.systemRole.name());
-        return Collections.singleton(authority);
+        return this.systemRole;
     }
 
     @Override
