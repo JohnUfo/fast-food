@@ -1,7 +1,7 @@
 package fast_food_website.payload;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Data
 public class RegisterDto {

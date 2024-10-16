@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .header-content {
+            text-align: center;
+            padding: 100px 0;
+            background-color: #007bff;
+            color: white;
+        }
+        .header-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .header-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .btn-custom {
+            border-radius: 50px;
+            padding: 0.7rem 2rem;
+            font-size: 1rem;
+        }
+        .btn-login {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .btn-register {
+            background-color: #ffc107;
+            color: #fff;
+        }
+        .btn-login:hover, .btn-register:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Main Content -->
+<div class="header-content">
+    <h1>Welcome to Our Service</h1>
+    <p>Join us and explore our amazing platform. You can log in or register to start your journey.</p>
+    <a href="/auth/login" class="btn btn-custom btn-login">Login</a>
+    <a href="/auth/register" class="btn btn-custom btn-register">Register</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

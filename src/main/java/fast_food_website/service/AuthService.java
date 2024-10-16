@@ -1,5 +1,6 @@
 package fast_food_website.service;
 
+import fast_food_website.payload.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
@@ -54,30 +55,27 @@ public class AuthService implements UserDetailsService {
                 String.valueOf(new Random().nextInt(999999)).substring(0, 4),
                 SystemRole.SYSTEM_ROLE_USER
         );
+        userRepository.save(user);
         sendEmail(user.getEmail(), user.getEmailCode());
 
-        userRepository.save(user);
         return new ApiResponse("Verify your email!", true);
     }
 
 
     public void sendEmail(String sendingEmail, String emailCode) {
-        try {
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setFrom("hvjjj83@gmail.com");
-            mailMessage.setTo(sendingEmail);
-            mailMessage.setSubject("Verify email");
-            mailMessage.setText(emailCode);
-            javaMailSender.send(mailMessage);
-        } catch (Exception e) {
-        }
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("hvjjj83@gmail.com");
+        mailMessage.setTo(sendingEmail);
+        mailMessage.setSubject("Verify email");
+        mailMessage.setText(emailCode);
+        javaMailSender.send(mailMessage);
     }
 
-    public ApiResponse verifyEmail(String email, String emailCode) {
+    public ApiResponse verifyEmail(String verificationCode, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (emailCode.equals(user.getEmailCode())) {
+            if (verificationCode.equals(user.getEmailCode())) {
                 user.setEnabled(true);
                 user.setEmailCode(null);
                 userRepository.save(user);
@@ -86,5 +84,16 @@ public class AuthService implements UserDetailsService {
             return new ApiResponse("Invalid email code", false);
         }
         return new ApiResponse("User not found", false);
+    }
+
+    public String loginUser(LoginDto loginDto) {
+        User user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials!"));
+
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials!");
+        }
+
+        return "JWT-TOKEN";
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import fast_food_website.entity.enums.SystemRole;
 import fast_food_website.entity.template.AbsEntity;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -27,14 +26,6 @@ public class User extends AbsEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    public User(String fullName, String password, String email, String emailCode, SystemRole systemRole) {
-        this.fullName = fullName;
-        this.password = password;
-        this.email = email;
-        this.emailCode = emailCode;
-        this.systemRole = systemRole;
-    }
-
     @Column(nullable = false)
     private String password;
 
@@ -44,8 +35,6 @@ public class User extends AbsEntity implements UserDetails {
     private Attachment avatar;
 
     private String emailCode;
-
-    private Timestamp lastActiveTime;
 
     @Enumerated(EnumType.STRING)
     private SystemRole systemRole;
@@ -61,6 +50,13 @@ public class User extends AbsEntity implements UserDetails {
         this.initialLetter = fullName.substring(0, 1);
     }
 
+    public User(String fullName, String password, String email, String emailCode, SystemRole systemRole) {
+        this.fullName = fullName;
+        this.password = password;
+        this.email = email;
+        this.emailCode = emailCode;
+        this.systemRole = systemRole;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

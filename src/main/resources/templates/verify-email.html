@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:the="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #343a40;
+        }
+        .form-control {
+            border-radius: 50px;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            border-radius: 50px;
+            padding: 0.7rem 2rem;
+            font-size: 1rem;
+        }
+        .btn-verify {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-verify:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Email Verification</h1>
+    <p>Please check your email <span th:text="${email}"></span> for the verification code.</p>
+    <form action="/auth/verifyEmail" method="POST">
+        <input type="text" name="verificationCode" class="form-control" placeholder="Enter Code" required>
+        <input type="hidden" name="email" th:value="${email}">
+        <button type="submit" class="btn btn-verify">Verify Code</button>
+    </form>
+
+</div>
+<div th:if="${errorMessage}" th:text="${errorMessage}" style="color:red;"></div>
+
+</body>
+</html>
