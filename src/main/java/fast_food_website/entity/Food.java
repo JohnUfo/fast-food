@@ -25,7 +25,12 @@ public class Food extends AbsEntity {
 
     private String description;
 
-    private int count;
+    public Food(String name, Double price, String description, Category category) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.category = category;
+    }
 
     @ManyToOne
     private Category category;

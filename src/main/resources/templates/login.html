@@ -70,7 +70,7 @@
 <body>
 
 <div class="login-container">
-    <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger text-center mt-3"></div>
+    <div th:if="${messageResponse}" th:text="${messageResponse}" class="alert alert-danger text-center mt-3"></div>
     <h2>Login</h2>
     <form action="/auth/login" method="post">
         <div class="form-group">

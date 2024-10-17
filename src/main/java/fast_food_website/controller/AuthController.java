@@ -35,8 +35,8 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, String errorMessage) {
-        model.addAttribute("errorMessage", errorMessage);
+    public String login(Model model, String messageResponse) {
+        model.addAttribute("messageResponse", messageResponse);
         return "login";
     }
 
@@ -60,14 +60,14 @@ public class AuthController {
 
             return "redirect:/";
         } catch (Exception e) {
-            redirectAttributes.addAttribute("errorMessage", "Invalid email or password");
+            redirectAttributes.addAttribute("messageResponse", "Invalid email or password");
             return "redirect:/auth/login";
         }
     }
 
     @GetMapping("/register")
-    public String register(String errorMessage, Model model) {
-        model.addAttribute("errorMessage", errorMessage);
+    public String register(String messageResponse, Model model) {
+        model.addAttribute("messageResponse", messageResponse);
         return "register";
     }
 
@@ -88,7 +88,7 @@ public class AuthController {
             return "redirect:/auth/verify-email";
         }
 
-        redirectAttributes.addAttribute("errorMessage", apiResponse.getMessage());
+        redirectAttributes.addAttribute("messageResponse", apiResponse.getMessage());
         return "redirect:/auth/register";
     }
 
@@ -101,16 +101,16 @@ public class AuthController {
 
             return "login";
         } else {
-            redirectAttributes.addAttribute("errorMessage", "Invalid email code. Please try again.");
+            redirectAttributes.addAttribute("messageResponse", "Invalid email code. Please try again.");
             redirectAttributes.addAttribute("email", email);
             return "redirect:/auth/verify-email";
         }
     }
 
     @GetMapping("/verify-email")
-    public String verifyEmailError(String errorMessage, String email, Model model) {
+    public String verifyEmailError(String messageResponse, String email, Model model) {
         model.addAttribute("email", email);
-        model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("messageResponse", messageResponse);
         return "verify-email";
     }
 

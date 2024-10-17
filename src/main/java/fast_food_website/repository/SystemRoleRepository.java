@@ -5,9 +5,7 @@ import fast_food_website.entity.enums.SystemRoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface SystemRoleRepository extends JpaRepository<SystemRole, UUID> {
+public interface SystemRoleRepository extends JpaRepository<SystemRole, Integer> {
     SystemRole findBySystemRoleName(SystemRoleName systemRoleName);
 }

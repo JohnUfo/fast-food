@@ -5,10 +5,9 @@ import org.springframework.stereotype.Repository;
 import fast_food_website.entity.User;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
 
     Optional<User> findByEmail(String email);

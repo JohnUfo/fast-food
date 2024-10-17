@@ -80,13 +80,13 @@
         function validatePasswords() {
             const password = document.querySelector('input[name="password"]').value;
             const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
-            const errorMessage = document.getElementById('errorMessage');
+            const messageResponse = document.getElementById('messageResponse');
 
             if (password !== confirmPassword) {
-                errorMessage.textContent = "Passwords do not match.";
+                messageResponse.textContent = "Passwords do not match.";
                 return false; // Prevent form submission
             } else {
-                errorMessage.textContent = ""; // Clear any previous error messages
+                messageResponse.textContent = ""; // Clear any previous error messages
                 return true; // Allow form submission
             }
         }
@@ -110,7 +110,7 @@
 <body>
 
 <div class="register-container">
-    <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger text-center mt-3"></div>
+    <div th:if="${messageResponse}" th:text="${messageResponse}" class="alert alert-danger text-center mt-3"></div>
     <h2>Register</h2>
     <form action="/auth/register" method="post" onsubmit="return validatePasswords()">
         <div class="form-group">
@@ -132,7 +132,7 @@
                onclick="togglePasswordVisibility('confirmPassword')"
                style="position: absolute; right: 10px; top: 10px;"></i>
         </div>
-        <div id="errorMessage" class="error-message"></div>
+        <div id="messageResponse" class="error-message"></div>
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
     <div class="login-link">
