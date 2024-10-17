@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +35,14 @@ public class CategoryController {
 
     @GetMapping("editCategoryPage/{id}")
     public String getEditPage(@PathVariable int id, Model model) {
-        model.addAttribute("category", categoryRepository.findById(id).get());
+        if (model.containsAttribute("messageResponse")) {
+            ApiResponse messageResponse = (ApiResponse) model.getAttribute("messageResponse");
+            model.addAttribute("messageResponse",messageResponse);
+        }
+        model.addAttribute("category", categoryRepository.findById(id).orElse(null));
         return "adminPage/editCategory";
     }
+
 
     @GetMapping("addCategoryPage")
     public String getAddPage() {
@@ -59,7 +65,7 @@ public class CategoryController {
             model.addAttribute("messageResponse", new ApiResponse("Category is already exists", false));
             return "adminPage/addCategory";
         }
-        categoryRepository.save(new Category(categoryName,null));
+        categoryRepository.save(new Category(categoryName, null));
         model.addAttribute("messageResponse", new ApiResponse("Category added successfully", true));
         model.addAttribute("categoryList", categoryRepository.findAll());
         return "adminPage/categories";
@@ -67,8 +73,12 @@ public class CategoryController {
 
     @PostMapping("/edit/{id}")
     public String editCategory(@PathVariable Integer id,
-                               @RequestParam String categoryName, Model model) {
+                               @RequestParam String categoryName, Model model, RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = categoryService.updateCategory(id, categoryName);
+        if (!apiResponse.isSuccess()) {
+            redirectAttributes.addFlashAttribute("messageResponse", apiResponse);
+            return "redirect:/admin/category/editCategoryPage/" + id;
+        }
         model.addAttribute("messageResponse", apiResponse);
         model.addAttribute("categoryList", categoryRepository.findAll());
         return "adminPage/categories";

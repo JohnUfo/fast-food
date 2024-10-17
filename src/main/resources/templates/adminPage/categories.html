@@ -8,60 +8,69 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #1e1e2f;
             margin: 0;
             padding: 0;
+            color: #d1d1e9;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: #28293d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         h2 {
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 26px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .category-list {
             list-style: none;
             padding: 0;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .category-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            padding: 20px;
+            background-color: #3c3f55;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .category-item:hover {
-            background-color: #f0f0f0;
+            background-color: #45475a;
+            transform: translateY(-3px);
         }
 
         .category-name {
-            font-size: 18px;
-            color: #333;
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
         }
 
         .btn {
             padding: 10px 20px;
             font-size: 14px;
-            border-radius: 5px;
+            border-radius: 50px;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            font-weight: bold;
         }
 
         .btn-edit {
@@ -72,6 +81,8 @@
 
         .btn-edit:hover {
             background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(69, 160, 73, 0.2);
         }
 
         .btn-delete {
@@ -81,51 +92,37 @@
 
         .btn-delete:hover {
             background-color: #e53935;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.2);
         }
 
         /* Add Category Button */
         .btn-add {
             display: inline-block;
-            width: auto;
             padding: 15px 30px;
             background-color: #3cb5f9;
             color: #fff;
             font-size: 16px;
-            font-weight: bold;
             text-align: center;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-decoration: none; /* This removes the underline */
         }
 
         .btn-add:hover {
             background-color: #3497d4;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 151, 212, 0.2);
         }
 
-        /* Button positioning */
         .btn-container {
             text-align: center;
         }
-        .alert {
-            display: inline-block; /* Allow button-like appearance */
-            padding: 10px 20px; /* Add padding for button-like appearance */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Pointer cursor on hover */
-        }
 
-        .alert-success {
-            background-color: #5cb85c; /* Bootstrap success color */
-            color: white; /* White text */
-        }
-
-        .alert-danger {
-            background-color: #d9534f; /* Bootstrap danger color */
-            color: white; /* White text */
-        }
-
-
+        /* Responsive design for mobile */
         @media (max-width: 768px) {
             .category-item {
                 flex-direction: column;
@@ -141,14 +138,31 @@
                 width: 100%;
             }
         }
+
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .alert-danger {
+            background-color: #d9534f;
+            color: white;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div th:if="${messageResponse != null}"
          th:classappend="${messageResponse.isSuccess} ? 'alert alert-success' : 'alert alert-danger'"
-         class="alert text-center mt-3"
-         style="display: inline-block;">
+         class="alert text-center mt-3">
         <span th:text="${messageResponse.message}"></span>
     </div>
 
@@ -158,8 +172,7 @@
         <li th:each="category : ${categoryList}" class="category-item">
             <a th:href="@{/admin/category/{id}/foods(id=${category.id})}"
                class="category-name"
-               th:text="${category.name}"
-               style="text-decoration: none; color: inherit;">
+               th:text="${category.name}">
             </a>
             <div>
                 <form th:action="@{/admin/category/editCategoryPage/{id}(id=${category.id})}" method="get">

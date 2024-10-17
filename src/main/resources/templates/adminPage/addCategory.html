@@ -8,24 +8,25 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
+            background-color: #121212; /* Dark background */
             margin: 0;
             padding: 0;
+            color: #e0e0e0; /* Light text color */
         }
 
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: #1f1f1f; /* Darker container */
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
         }
 
         h2 {
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+            color: #3cb5f9; /* Bright color for heading */
+            margin-bottom: 25px;
             font-size: 24px;
         }
 
@@ -36,73 +37,91 @@
         label {
             display: block;
             font-weight: bold;
-            color: #666;
-            margin-bottom: 5px;
+            color: #fff; /* Light color for labels */
+            margin-bottom: 8px;
         }
 
-        input[type="text"], textarea {
+        input[type="text"] {
             width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #444; /* Dark border */
             border-radius: 5px;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
+            background-color: #2a2a2a; /* Dark input background */
+            color: #e0e0e0; /* Light text color */
+            transition: border-color 0.2s, background-color 0.2s;
         }
 
-        input[type="text"]:focus, textarea:focus {
-            border-color: #3cb5f9;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
+        input[type="text"]:focus {
+            border-color: #3cb5f9; /* Highlight on focus */
+            background-color: #333; /* Slightly lighter on focus */
+            outline: none;
         }
 
         .btn {
-            display: block;
             width: 100%;
-            padding: 15px;
-            background-color: #3cb5f9;
+            padding: 12px;
+            background-color: #3cb5f9; /* Button color */
             color: #fff;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-align: center;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s, transform 0.1s; /* Added transform effect */
         }
 
         .btn:hover {
-            background-color: #3497d4;
+            background-color: #3497d4; /* Darker on hover */
+            transform: scale(1.05); /* Slightly larger on hover */
         }
 
         .form-footer {
             text-align: center;
             margin-top: 20px;
         }
-        .alert {
-            display: inline-block; /* Allow button-like appearance */
-            padding: 10px 20px; /* Add padding for button-like appearance */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Pointer cursor on hover */
+
+        .form-footer a {
+            color: #3cb5f9; /* Bright color for links */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s; /* Smooth transition */
         }
 
+        .form-footer a:hover {
+            color: #fff; /* Change color on hover */
+            text-decoration: underline;
+        }
 
-        @media (max-width: 768px) {
+        .alert {
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            display: block;
+        }
+
+        .alert-success {
+            background-color: #2e7d32; /* Success background */
+            color: #e0e0e0; /* Light text */
+        }
+
+        .alert-danger {
+            background-color: #c62828; /* Danger background */
+            color: #e0e0e0; /* Light text */
+        }
+
+        @media (max-width: 600px) {
             .container {
                 margin: 20px auto;
                 padding: 15px;
             }
 
             h2 {
-                font-size: 22px;
+                font-size: 20px;
             }
 
             .btn {
-                font-size: 16px;
-                padding: 12px;
+                font-size: 14px;
             }
         }
     </style>
@@ -111,8 +130,7 @@
 <div class="container">
     <div th:if="${messageResponse != null}"
          th:classappend="${messageResponse.isSuccess} ? 'alert alert-success' : 'alert alert-danger'"
-         class="alert text-center mt-3"
-         style="display: inline-block;">
+         class="alert">
         <span th:text="${messageResponse.message}"></span>
     </div>
 

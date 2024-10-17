@@ -18,6 +18,9 @@ public class CategoryService {
             return new ApiResponse("Category is not exist", false);
         }
         Category category = categoryRepository.findById(id).get();
+        if(category.getName().equals(name)) {
+            return new ApiResponse("Category name is same", false);
+        }
         category.setName(name);
         categoryRepository.save(category);
         return new ApiResponse("Category updated successfully", true);
