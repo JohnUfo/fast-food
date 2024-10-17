@@ -56,7 +56,7 @@ public class AuthController {
 
             HttpSession session = request.getSession();
             session.setAttribute("JWT_TOKEN", token);
-            session.setAttribute("USER_EMAIL", user.getEmail());
+            session.setAttribute("USER", user);
 
             return "redirect:/";
         } catch (Exception e) {
