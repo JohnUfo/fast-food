@@ -17,10 +17,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin/category")
 public class CategoryController {
-    //adminga va userlarge different page qilish kere
-    //category tanlaganda foodlari chiqishi kere
-    //cascadeni qilish kere. category delete bosa foodlari delete bolishi kere
-
     @Autowired
     CategoryRepository categoryRepository;
 
@@ -33,7 +29,6 @@ public class CategoryController {
     @GetMapping
     public String getCategoryList(Model model) {
         model.addAttribute("categoryList", categoryRepository.findAll());
-        System.out.println(categoryRepository.findAll());
         return "adminPage/categories";
     }
 
@@ -64,7 +59,7 @@ public class CategoryController {
             model.addAttribute("messageResponse", new ApiResponse("Category is already exists", false));
             return "adminPage/addCategory";
         }
-        categoryRepository.save(new Category(categoryName));
+        categoryRepository.save(new Category(categoryName,null));
         model.addAttribute("messageResponse", new ApiResponse("Category added successfully", true));
         model.addAttribute("categoryList", categoryRepository.findAll());
         return "adminPage/categories";

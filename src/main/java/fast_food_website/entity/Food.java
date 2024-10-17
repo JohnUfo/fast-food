@@ -33,5 +33,6 @@ public class Food extends AbsEntity {
     }
 
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)  // Enforcing non-nullable foreign key
     private Category category;
 }
