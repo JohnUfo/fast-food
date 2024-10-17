@@ -153,7 +153,7 @@
     </div>
 
 
-    <h2>Food List</h2>
+    <h2 th:text="${category.name}"></h2>
 
     <ul class="food-list">
         <li th:each="food : ${foodList}" class="food-item">
@@ -165,6 +165,7 @@
 
                 <form th:action="@{/admin/food/delete/{id}(id=${food.id})}" method="post">
                     <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="categoryId" th:value="${category.id}">
                     <button type="submit" class="btn btn-delete">Delete</button>
                 </form>
             </div>
@@ -172,7 +173,11 @@
     </ul>
 
     <div class="btn-container">
-        <a href="/admin/food/addFoodPage" class="btn-add">Add New Food</a>
+        <a th:href="@{/admin/food/addFoodPage(categoryId=${category.id})}" class="btn-add">Add New Food</a>
+    </div>
+
+    <div class="btn-container">
+        <a href="/admin/category" class="btn-add">Back to Category List</a>
     </div>
 </div>
 </body>

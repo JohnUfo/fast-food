@@ -99,7 +99,7 @@ public class CategoryController {
     public String getFoodsByCategory(@PathVariable Integer id, Model model) {
         List<Food> foodList = foodRepository.findByCategoryId(id);
         model.addAttribute("foodList", foodList);
-        model.addAttribute("categoryId", id);
+        model.addAttribute("category", categoryRepository.findById(id).get());
         return "adminPage/adminFoodsByCategoryId";
     }
 }
