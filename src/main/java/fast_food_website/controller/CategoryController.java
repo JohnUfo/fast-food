@@ -1,25 +1,31 @@
 package fast_food_website.controller;
 
 import fast_food_website.entity.Category;
+import fast_food_website.entity.Food;
 import fast_food_website.payload.ApiResponse;
 import fast_food_website.repository.CategoryRepository;
+import fast_food_website.repository.FoodRepository;
 import fast_food_website.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/category")
 public class CategoryController {
-    //category path ishalganda categories html ochiladi
     //adminga va userlarge different page qilish kere
+    //category tanlaganda foodlari chiqishi kere
+    //cascadeni qilish kere. category delete bosa foodlari delete bolishi kere
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    FoodRepository foodRepository;
 
     @Autowired
     CategoryService categoryService;
@@ -28,25 +34,27 @@ public class CategoryController {
     public String getCategoryList(Model model) {
         model.addAttribute("categoryList", categoryRepository.findAll());
         System.out.println(categoryRepository.findAll());
-        return "categories";
+        return "adminPage/categories";
     }
 
     @GetMapping("editCategoryPage/{id}")
     public String getEditPage(@PathVariable int id, Model model) {
         model.addAttribute("category", categoryRepository.findById(id).get());
-        return "editCategory";
+        return "adminPage/editCategory";
     }
 
     @GetMapping("addCategoryPage")
     public String getAddPage() {
-        return "addCategory";
+        return "adminPage/addCategory";
     }
 
     @GetMapping("/{id}")
     public String getCategoryById(@PathVariable Integer id, Model model) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
+        List<Food> foodList = foodRepository.findByCategoryId(id);
         model.addAttribute("category", optionalCategory.get());
-        return "categories";
+        model.addAttribute("foodList", foodList);
+        return "adminPage/adminFoodsByCategoryId";
     }
 
     @PostMapping("/add")
@@ -54,12 +62,12 @@ public class CategoryController {
         boolean exists = categoryRepository.existsByName(categoryName);
         if (exists) {
             model.addAttribute("messageResponse", new ApiResponse("Category is already exists", false));
-            return "addCategory";
+            return "adminPage/addCategory";
         }
         categoryRepository.save(new Category(categoryName));
         model.addAttribute("messageResponse", new ApiResponse("Category added successfully", true));
         model.addAttribute("categoryList", categoryRepository.findAll());
-        return "categories";
+        return "adminPage/categories";
     }
 
     @PostMapping("/edit/{id}")
@@ -68,7 +76,7 @@ public class CategoryController {
         ApiResponse apiResponse = categoryService.updateCategory(id, categoryName);
         model.addAttribute("messageResponse", apiResponse);
         model.addAttribute("categoryList", categoryRepository.findAll());
-        return "categories";
+        return "adminPage/categories";
     }
 
     @PostMapping("/delete/{id}")
@@ -82,8 +90,16 @@ public class CategoryController {
             categoryRepository.deleteById(id);
             model.addAttribute("categoryList", categoryRepository.findAll());
             model.addAttribute("messageResponse", new ApiResponse("Category deleted successfully", true));
-            return "categories";
+            return "adminPage/categories";
         }
-        return "categories";
+        return "adminPage/categories";
+    }
+
+    @GetMapping("/{id}/foods")
+    public String getFoodsByCategory(@PathVariable Integer id, Model model) {
+        List<Food> foodList = foodRepository.findByCategoryId(id);
+        model.addAttribute("foodList", foodList);
+        model.addAttribute("categoryId", id);
+        return "adminPage/adminFoodsByCategoryId";
     }
 }

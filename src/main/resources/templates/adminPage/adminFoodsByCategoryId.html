@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .food-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .food-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .food-name {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-edit {
+            background-color: #4caf50;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .btn-edit:hover {
+            background-color: #45a049;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            background-color: #e53935;
+        }
+
+        /* Add Food Button */
+        .btn-add {
+            display: inline-block;
+            width: auto;
+            padding: 15px 30px;
+            background-color: #3cb5f9;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #3497d4;
+        }
+
+        /* Button positioning */
+        .btn-container {
+            text-align: center;
+        }
+        .alert {
+            display: inline-block; /* Allow button-like appearance */
+            padding: 10px 20px; /* Add padding for button-like appearance */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        .alert-success {
+            background-color: #5cb85c; /* Bootstrap success color */
+            color: white; /* White text */
+        }
+
+        .alert-danger {
+            background-color: #d9534f; /* Bootstrap danger color */
+            color: white; /* White text */
+        }
+
+
+        @media (max-width: 768px) {
+            .food-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-edit, .btn-delete {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .btn-add {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div th:if="${messageResponse != null}"
+         th:classappend="${messageResponse.isSuccess} ? 'alert alert-success' : 'alert alert-danger'"
+         class="alert text-center mt-3"
+         style="display: inline-block;">
+        <span th:text="${messageResponse.message}"></span>
+    </div>
+
+
+    <h2>Food List</h2>
+
+    <ul class="food-list">
+        <li th:each="food : ${foodList}" class="food-item">
+            <span th:text="${food.name}" class="food-name"></span>
+            <div>
+                <form th:action="@{/admin/food/editFoodPage/{id}(id=${food.id})}" method="get">
+                    <button type="submit" class="btn btn-edit">Edit</button>
+                </form>
+
+                <form th:action="@{/admin/food/delete/{id}(id=${food.id})}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+
+    <div class="btn-container">
+        <a href="/admin/food/addFoodPage" class="btn-add">Add New Food</a>
+    </div>
+</div>
+</body>
+</html>

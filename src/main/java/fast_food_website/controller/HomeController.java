@@ -15,6 +15,6 @@ public class HomeController {
         if (session != null && session.getAttribute("JWT_TOKEN") != null) {
             return "homePage";
         }
-        return "mainPage";
+        return "index";
     }
 }

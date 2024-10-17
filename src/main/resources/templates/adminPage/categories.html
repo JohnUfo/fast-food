@@ -152,13 +152,15 @@
         <span th:text="${messageResponse.message}"></span>
     </div>
 
-
     <h2>Food Category List</h2>
 
-    <!-- Category List -->
     <ul class="category-list">
         <li th:each="category : ${categoryList}" class="category-item">
-            <span th:text="${category.name}" class="category-name"></span>
+            <a th:href="@{/admin/category/{id}/foods(id=${category.id})}"
+               class="category-name"
+               th:text="${category.name}"
+               style="text-decoration: none; color: inherit;">
+            </a>
             <div>
                 <form th:action="@{/admin/category/editCategoryPage/{id}(id=${category.id})}" method="get">
                     <button type="submit" class="btn btn-edit">Edit</button>
@@ -172,7 +174,6 @@
         </li>
     </ul>
 
-    <!-- Add Category Button -->
     <div class="btn-container">
         <a href="/admin/category/addCategoryPage" class="btn-add">Add New Category</a>
     </div>
