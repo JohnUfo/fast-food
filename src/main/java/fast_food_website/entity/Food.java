@@ -14,6 +14,10 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Food extends AbsEntity {
 
+    @OneToOne(fetch = FetchType.LAZY)
+//    @Column(nullable = false) //each food needs one photo
+    private Attachment foodPhoto;
+
     @Column(nullable = false, unique = true)
     private String name;
 
