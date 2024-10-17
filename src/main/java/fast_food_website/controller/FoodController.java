@@ -26,6 +26,28 @@ public class FoodController {
     @Autowired
     FoodRepository foodRepository;
 
+
+    @GetMapping("editFoodPage/{id}")
+    public String getEditPage(@PathVariable int id, Model model) {
+        model.addAttribute("food", foodRepository.findById(id).get());
+        model.addAttribute("categoryList", categoryRepository.findAll());
+        return "adminPage/editFood";
+    }
+
+    @PostMapping("/edit/{foodId}")
+    public String editCategory(@PathVariable Integer foodId,
+                               @RequestParam String foodName,
+                               @RequestParam double foodPrice,
+                               @RequestParam String foodDescription,
+                               @RequestParam Integer categoryId, Model model) {
+        Food food = new Food(foodName, foodPrice, foodDescription, categoryRepository.findById(categoryId).get());
+        ApiResponse apiResponse = foodService.updateFood(foodId, food);
+        model.addAttribute("messageResponse", apiResponse);
+        model.addAttribute("foodList", foodRepository.findById(categoryId));
+        return "redirect:/admin/category/" + categoryId + "/foods";
+    }
+
+
     @GetMapping("/addFoodPage")
     public String addFoodPage(@RequestParam Integer categoryId, Model model) {
         model.addAttribute("categoryList", categoryRepository.findAll());
