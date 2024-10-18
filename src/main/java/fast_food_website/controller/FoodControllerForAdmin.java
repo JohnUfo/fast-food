@@ -1,6 +1,5 @@
 package fast_food_website.controller;
 
-import fast_food_website.entity.Category;
 import fast_food_website.entity.Food;
 import fast_food_website.payload.ApiResponse;
 import fast_food_website.repository.CategoryRepository;
@@ -11,11 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/admin/food")
-public class FoodController {
+public class FoodControllerForAdmin {
 
     @Autowired
     FoodService foodService;
@@ -84,7 +81,7 @@ public class FoodController {
             }
             foodRepository.deleteById(id);
             model.addAttribute("categoryId", id);
-            model.addAttribute("categoryList", foodRepository.findByCategoryId(categoryId));
+            model.addAttribute("categoryList", foodRepository.findAllByCategoryId(categoryId));
             model.addAttribute("messageResponse", new ApiResponse("Food deleted successfully", true));
             return "adminPage/categories";
         }

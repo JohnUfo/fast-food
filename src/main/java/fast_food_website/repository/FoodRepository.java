@@ -8,5 +8,5 @@ import java.util.List;
 public interface FoodRepository extends JpaRepository<Food, Integer> {
     boolean existsByName(String name);
 
-    List<Food> findByCategoryId(Integer id);
+    List<Food> findAllByCategoryId(Integer categoryId);
 }

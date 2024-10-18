@@ -160,11 +160,6 @@
 </head>
 <body>
 <div class="container">
-    <div th:if="${messageResponse != null}"
-         th:classappend="${messageResponse.isSuccess} ? 'alert alert-success' : 'alert alert-danger'"
-         class="alert text-center mt-3">
-        <span th:text="${messageResponse.message}"></span>
-    </div>
 
     <h2>Food Category List</h2>
 

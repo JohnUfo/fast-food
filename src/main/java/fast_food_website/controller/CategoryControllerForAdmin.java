@@ -52,7 +52,7 @@ public class CategoryControllerForAdmin {
     @GetMapping("/{id}")
     public String getCategoryById(@PathVariable Integer id, Model model) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
-        List<Food> foodList = foodRepository.findByCategoryId(id);
+        List<Food> foodList = foodRepository.findAllByCategoryId(id);
         model.addAttribute("category", optionalCategory.get());
         model.addAttribute("foodList", foodList);
         return "adminPage/adminFoodsByCategoryId";
@@ -102,7 +102,7 @@ public class CategoryControllerForAdmin {
 
     @GetMapping("/{id}/foods")
     public String getFoodsByCategory(@PathVariable Integer id, Model model) {
-        List<Food> foodList = foodRepository.findByCategoryId(id);
+        List<Food> foodList = foodRepository.findAllByCategoryId(id);
         model.addAttribute("foodList", foodList);
         model.addAttribute("category", categoryRepository.findById(id).get());
         return "adminPage/adminFoodsByCategoryId";
