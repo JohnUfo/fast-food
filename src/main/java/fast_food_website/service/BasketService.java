@@ -1,7 +1,6 @@
 package fast_food_website.service;
 
 import fast_food_website.entity.User;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 @Service

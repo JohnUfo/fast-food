@@ -1,7 +1,7 @@
 package fast_food_website.service;
 
-import fast_food_website.entity.enums.SystemRoleName;
-import fast_food_website.repository.SystemRoleRepository;
+import fast_food_website.entity.Role;
+import fast_food_website.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,9 +17,7 @@ import fast_food_website.payload.RegisterDto;
 import fast_food_website.repository.UserRepository;
 
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -36,7 +34,7 @@ public class AuthService implements UserDetailsService {
     JavaMailSender javaMailSender;
 
     @Autowired
-    SystemRoleRepository systemRoleRepository;
+    RoleRepository roleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -52,14 +50,25 @@ public class AuthService implements UserDetailsService {
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             return new ApiResponse("This user already exists", false);
         }
+        Role roleAdmin = roleRepository.save(new Role("ADMIN"));
+        Role role_food_editor = roleRepository.save(new Role("FOOD_EDITOR"));
+        Role role_category_editor = roleRepository.save(new Role("CATEGORY_EDITOR"));
+        Role roleUser = roleRepository.save(new Role("USER"));
 
-        User user = new User(
-                registerDto.getFullName(),
-                passwordEncoder.encode(registerDto.getPassword()),
-                registerDto.getEmail(),
-                String.valueOf(new Random().nextInt(999999)).substring(0, 4),
-                Collections.singleton(systemRoleRepository.findBySystemRoleName((SystemRoleName.SYSTEM_ROLE_USER)))
-        );
+        User user = new User();
+        user.setFullName(registerDto.getFullName());
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        user.setEmailCode(String.valueOf(new Random().nextInt(999999)).substring(0, 4));
+        Set<Role> roles = new HashSet<>();
+        if (user.getEmail().equals("m1lymoe16@gmail.com")) {
+            roles.add(roleAdmin);
+            roles.add(role_category_editor);
+            roles.add(role_food_editor);
+        } else {
+            roles.add(roleUser);  // Default role
+        }
+        user.setRoles(roles);
         userRepository.save(user);
         sendEmail(user.getEmail(), user.getEmailCode());
 

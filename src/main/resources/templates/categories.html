@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e2f;
+            margin: 0;
+            padding: 0;
+            color: #d1d1e9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #28293d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #3c3f55;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .category-item:hover {
+            background-color: #45475a;
+            transform: translateY(-3px);
+        }
+
+        .category-name {
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background-color: #4caf50;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .btn-edit:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(69, 160, 73, 0.2);
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            background-color: #e53935;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.2);
+        }
+
+        /* Add Category Button */
+        .btn-add {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #3cb5f9;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-decoration: none; /* This removes the underline */
+        }
+
+        .btn-add:hover {
+            background-color: #3497d4;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 151, 212, 0.2);
+        }
+
+        .btn-container {
+            text-align: center;
+        }
+
+        /* Responsive design for mobile */
+        @media (max-width: 768px) {
+            .category-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-edit, .btn-delete {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .btn-add {
+                width: 100%;
+            }
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .alert-danger {
+            background-color: #d9534f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div th:if="${messageResponse != null}"
+         th:classappend="${messageResponse.isSuccess} ? 'alert alert-success' : 'alert alert-danger'"
+         class="alert text-center mt-3">
+        <span th:text="${messageResponse.message}"></span>
+    </div>
+
+    <h2>Food Category List</h2>
+
+    <ul class="category-list">
+        <li th:each="category : ${categoryList}" class="category-item">
+            <a th:href="@{/category/{id}/foods(id=${category.id})}"
+               class="category-name"
+               th:text="${category.name}">
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
