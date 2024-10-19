@@ -99,4 +99,15 @@ public class AuthService implements UserDetailsService {
         }
         return new ApiResponse("User not found", false);
     }
+
+    public ApiResponse sendEmailForUser(String email) {
+        if (userRepository.existsByEmail(email)) {
+            Optional<User> user = userRepository.findByEmail(email);
+            user.get().setEmailCode(String.valueOf(new Random().nextInt(999999)).substring(0, 4));
+            userRepository.save(user.get());
+            sendEmail(user.get().getEmail(), user.get().getEmailCode());
+            return new ApiResponse("Password reset link sent to your email!", true);
+        }
+        return new ApiResponse("User not found", false);
+    }
 }
