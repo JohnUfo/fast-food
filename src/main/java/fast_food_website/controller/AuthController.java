@@ -20,6 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -37,9 +40,10 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, String messageResponse) {
-        model.addAttribute("messageResponse", messageResponse);
-        return "login";
+    public ResponseEntity<Map<String, Object>> getApiData(@RequestParam String messageResponse) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("messageResponse", messageResponse);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -117,13 +121,4 @@ public class AuthController {
         return "verify-email";
     }
 
-    @PostMapping("/forgot-password")
-    public String forgotPassword(@RequestParam String email) {
-        try {
-            ApiResponse apiResponse = authService.sendEmailForUser(email);
-            return "/"; //change html
-        } catch (UsernameNotFoundException e) {
-            return "/"; //change html
-        }
-    }
 }
