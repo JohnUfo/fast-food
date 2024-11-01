@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void userForFrontEnd(Model model) {
         User user = new User();
+        model.addAttribute("user", null);
         String email = SecurityUtil.getSessionUser();
         if (email != null) {
             user = findByEmail(email);

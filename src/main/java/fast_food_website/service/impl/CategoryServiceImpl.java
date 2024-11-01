@@ -26,6 +26,15 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll().stream().map(this::mapToCategoryDto).collect(Collectors.toList());
     }
 
+    @Override
+    public void saveCategory(CategoryDto categoryDto) {
+        categoryRepository.save(mapToCategory(categoryDto));
+    }
+
+    private Category mapToCategory(CategoryDto categoryDto) {
+        return new Category(categoryDto.getName(),categoryDto.getFoods());
+    }
+
     private CategoryDto mapToCategoryDto(Category category) {
         return CategoryDto.builder()
                 .id(category.getId())
