@@ -7,6 +7,7 @@ import fast_food_website.payload.LoginDto;
 import fast_food_website.payload.RegistrationDto;
 import fast_food_website.service.CategoryService;
 import fast_food_website.service.UserService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class AuthController {
     }
 
     @SneakyThrows
+    @Transactional
     @PostMapping("/register/save")
     public String register(@Valid @ModelAttribute("user") RegistrationDto user,
                            BindingResult result,
@@ -73,10 +75,10 @@ public class AuthController {
         }
 
         userService.verifyEmail(emailVerifyDto, model);
-        return "redirect:/index?success";
+        return "redirect:/?success";
     }
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String categoryList(Model model) {
         userService.userForFrontEnd(model);
         List<CategoryDto> categories = categoryService.findAllCategories();

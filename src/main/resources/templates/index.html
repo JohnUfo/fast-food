@@ -32,18 +32,18 @@
                         <input name="query" class="form-control mr-sm-2 mb-5" type="search"
                                placeholder="Search food category" aria-label="Search">
                     </form>
-                    <!-- New Button to Save Category -->
                     <a class="btn btn-success mb-4" th:href="@{/category/create}">Create New Category</a>
                 </div>
                 <div th:each="category : ${categories}" class="col-lg-6 mb-2">
                     <div class="position-relative mb-3">
                         <a th:text="${category.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link"
-                           href="#!">Project name</a>
+                           href="#!">Categories</a>
                     </div>
-                    <!--                    <div th:if="${user.id}==${club.createdBy.id}">-->
                     <a class="btn btn-primary"
                        th:href="@{/category/{categoryId}/edit(categoryId=${category.id})}">Edit</a>
-                    <!--                    </div>-->
+                    <a class="btn btn-danger"
+                       th:href="@{/category/{categoryId}/delete(categoryId=${category.id})}">Delete</a>
+
                 </div>
             </div>
         </div>

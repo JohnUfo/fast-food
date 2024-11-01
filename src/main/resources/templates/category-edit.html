@@ -12,10 +12,9 @@
 <main class="flex-shrink-0">
     <section layout:fragment="body" class="py-5">
         <div class="container">
-            <div th:if="${message}" class="alert alert-danger">
-                <p th:text="${message}"></p>
-            </div>
-            <form role="form" method="post" th:action="@{/category/create}" th:object="${category}">
+            <form role="form" method="post" th:action="@{/category/{categoryId}/edit(categoryId=${category.id})}"
+                  th:object="${category}">
+                <input type="hidden" th:field="*{id}">
                 <div class="container">
                     <div class="row">
                         <div class="form-group col-md-6">
@@ -30,7 +29,7 @@
                         </div>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                     <Button class="btn btn-dark" th:href="@{/}">Go Back</Button>
                 </div>
             </form>

@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
                 .and()
                 .formLogin(form -> form.loginPage("/login")
-                        .defaultSuccessUrl("/index")
+                        .defaultSuccessUrl("/")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error=true")
                         .permitAll()
