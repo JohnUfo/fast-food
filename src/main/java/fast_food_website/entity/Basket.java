@@ -1,27 +1,26 @@
 package fast_food_website.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import fast_food_website.entity.template.AbsEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString(exclude = "user")
 public class Basket extends AbsEntity {
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BasketItem> basketItems = new ArrayList<>();
-
-    private int quantity;
 }

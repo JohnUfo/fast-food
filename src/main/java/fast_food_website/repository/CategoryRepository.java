@@ -2,9 +2,9 @@ package fast_food_website.repository;
 
 import fast_food_website.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    boolean existsByName(String name);
+@Repository
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Category getByName(String name);
 }

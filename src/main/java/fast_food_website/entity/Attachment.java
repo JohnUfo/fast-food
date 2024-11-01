@@ -1,25 +1,35 @@
 package fast_food_website.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fast_food_website.entity.template.AbsEntity;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.OneToOne;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Attachment extends AbsEntity {
 
-    private String fileOriginalName; // pdp.jpg, inn.pdf
+    @Column(nullable = false)
+    private String fileOriginalName;
 
-    private long size; //2048000
+    @Column(nullable = false)
+    private long size;
 
-    private String contentType; //application/pdf, image/png
+    @Column(nullable = false)
+    private String contentType;
 
-    //To save file into system
-    private String name; //Papkani ichidan topish uchun unique name
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private AttachmentContent attachmentContent;
+
 }

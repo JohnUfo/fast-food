@@ -1,21 +1,23 @@
 package fast_food_website.entity;
 
 import fast_food_website.entity.template.AbsEntity;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class AttachmentContent extends AbsEntity {
 
+    @Basic(fetch = FetchType.LAZY)
     private byte[] bytes;
 
-    @OneToOne
+    @OneToOne(mappedBy = "attachmentContent")
     private Attachment attachment;
 }

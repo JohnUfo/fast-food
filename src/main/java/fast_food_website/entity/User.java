@@ -1,20 +1,18 @@
 package fast_food_website.entity;
 
+import fast_food_website.entity.template.AbsEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import fast_food_website.entity.template.AbsEntity;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "users")
@@ -28,14 +26,12 @@ public class User extends AbsEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String initialLetter;
-
     @OneToOne(fetch = FetchType.LAZY)
     private Attachment avatar;
 
-    private String emailCode;
+    private String verificationCode;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,27 +39,13 @@ public class User extends AbsEntity implements UserDetails {
     )
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Basket basket;
 
     private boolean enabled = false;
     private boolean accountNonExpired = true;
     private boolean credentialsNonExpired = true;
     private boolean accountNonLocked = true;
-
-    @PrePersist
-    @PreUpdate
-    public void setInitialLetterMyMethod() {
-        this.initialLetter = fullName.substring(0, 1);
-    }
-
-    public User(String fullName, String password, String email, String emailCode, Set<Role> roles) {
-        this.fullName = fullName;
-        this.password = password;
-        this.email = email;
-        this.emailCode = emailCode;
-        this.roles = roles;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

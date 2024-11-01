@@ -1,124 +1,74 @@
 package fast_food_website.controller;
 
 import fast_food_website.entity.User;
-import fast_food_website.payload.ApiResponse;
-import fast_food_website.payload.RegisterDto;
-import fast_food_website.security.JwtProvider;
-import fast_food_website.service.AuthService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import fast_food_website.payload.EmailVerifyDto;
+import fast_food_website.payload.RegistrationDto;
+import fast_food_website.service.UserService;
+import fast_food_website.service.impl.UserServiceImpl;
+import jakarta.validation.Valid;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 
 @Controller
-@RequestMapping("/auth")
 public class AuthController {
 
-    AuthService authService;
-    AuthenticationManager authenticationManager;
-    JwtProvider jwtProvider;
+
+    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @Autowired
-    @Lazy
-    public AuthController(AuthService authService, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
-        this.authService = authService;
-        this.authenticationManager = authenticationManager;
-        this.jwtProvider = jwtProvider;
+    public AuthController(UserServiceImpl userServiceImpl, UserService userService) {
+        this.userServiceImpl = userServiceImpl;
+        this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<Map<String, Object>> getApiData(@RequestParam String messageResponse) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("messageResponse", messageResponse);
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
-                        HttpServletRequest request,
-                        RedirectAttributes redirectAttributes) {
-        try {
-            Authentication authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, password)
-            );
-
-            User user = (User) authenticate.getPrincipal();
-
-            String token = jwtProvider.generateToken(user.getEmail());
-
-            HttpSession session = request.getSession();
-            session.setAttribute("JWT_TOKEN", token);
-            session.setAttribute("USER", user);
-            System.out.println(user);
-
-            return "redirect:/";
-        } catch (Exception e) {
-            redirectAttributes.addAttribute("messageResponse", "Invalid email or password");
-            return "redirect:/auth/login";
-        }
-    }
 
     @GetMapping("/register")
-    public String register(String messageResponse, Model model) {
-        model.addAttribute("messageResponse", messageResponse);
+    public String getRegisterForm(Model model) {
+        model.addAttribute("user", new RegistrationDto());
         return "register";
     }
 
-    @PostMapping("/register")
-    public String register(@RequestParam String fullName,
-                           @RequestParam String email,
-                           @RequestParam String password,
-                           RedirectAttributes redirectAttributes) {
-        RegisterDto registerDto = new RegisterDto();
-        registerDto.setFullName(fullName);
-        registerDto.setEmail(email);
-        registerDto.setPassword(password);
+    @SneakyThrows
+    @PostMapping("/register/save")
+    public String register(@Valid @ModelAttribute("user") RegistrationDto user,
+                           BindingResult result,
+                           Model model) {
 
-        ApiResponse apiResponse = authService.registerUser(registerDto);
+        User existingUserEmail = userService.findByEmail(user.getEmail());
 
-        if (apiResponse.isSuccess()) {
-            redirectAttributes.addAttribute("email", email);
-            return "redirect:/auth/verify-email";
+        if (existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
+            return "redirect:/register?fail";
         }
 
-        redirectAttributes.addAttribute("messageResponse", apiResponse.getMessage());
-        return "redirect:/auth/register";
-    }
-
-    @PostMapping("/verifyEmail")
-    public String verifyEmail(@RequestParam String email,
-                              @RequestParam String verificationCode,
-                              RedirectAttributes redirectAttributes) {
-        ApiResponse apiResponse = authService.verifyEmail(verificationCode, email);
-        if (apiResponse.isSuccess()) {
-
-            return "login";
-        } else {
-            redirectAttributes.addAttribute("messageResponse", "Invalid email code. Please try again.");
-            redirectAttributes.addAttribute("email", email);
-            return "redirect:/auth/verify-email";
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            return "register";
         }
-    }
 
-    @GetMapping("/verify-email")
-    public String verifyEmailError(String messageResponse, String email, Model model) {
-        model.addAttribute("email", email);
-        model.addAttribute("messageResponse", messageResponse);
+        userService.saveUser(user);
+        model.addAttribute("user", new EmailVerifyDto());
         return "verify-email";
     }
 
+    @GetMapping("/login")
+    public String getLoginForm(Model model) {
+        model.addAttribute("user", new RegistrationDto());
+        return "login";
+    }
+
+    @PostMapping("/verify-email")
+    public String verifyEmail(@Valid @ModelAttribute("user") EmailVerifyDto emailVerifyDto, Model model) {
+        userService.verifyEmail(emailVerifyDto, model);
+        return "redirect:/index?success";
+    }
 }
