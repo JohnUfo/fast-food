@@ -15,7 +15,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div th:if="${param.error}" class="alert alert-danger">
-                        Invalid email and password.
+                        Invalid username and password.
                     </div>
                     <div th:if="${param.logout}" class="alert alert-primary">
                         You have been logged out!
@@ -25,11 +25,11 @@
                             <h3 class="text-center mb-4">Login to Account</h3>
                             <form role="form" method="post" th:action="@{/login}">
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
+                                    <label for="username" class="form-label">Username</label>
                                     <input type="text"
                                            class="form-control"
-                                           id="email"
-                                           name="email"
+                                           id="username"
+                                           name="username"
                                            placeholder="Enter your email">
                                 </div>
                                 <div class="mb-3">
@@ -41,7 +41,6 @@
                                            placeholder="Create a password">
                                 </div>
                                 <div class="d-grid gap-2 mt-4">
-                                    <button type="submit" class="btn btn-group-lg" th:href="@{/register}">Don't have an account already?</button>
                                     <button type="submit" class="btn btn-primary" value="Log in">Login</button>
                                 </div>
                             </form>

@@ -1,14 +1,15 @@
 package fast_food_website.controller;
 
 import fast_food_website.entity.User;
+import fast_food_website.payload.CategoryDto;
 import fast_food_website.payload.EmailVerifyDto;
+import fast_food_website.payload.LoginDto;
 import fast_food_website.payload.RegistrationDto;
+import fast_food_website.service.CategoryService;
 import fast_food_website.service.UserService;
-import fast_food_website.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,21 +17,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Random;
+import java.util.List;
 
 @Controller
 public class AuthController {
 
-
-    private final UserServiceImpl userServiceImpl;
     private final UserService userService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public AuthController(UserServiceImpl userServiceImpl, UserService userService) {
-        this.userServiceImpl = userServiceImpl;
+    public AuthController(UserService userService, CategoryService categoryService) {
         this.userService = userService;
+        this.categoryService = categoryService;
     }
-
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
@@ -62,13 +61,26 @@ public class AuthController {
 
     @GetMapping("/login")
     public String getLoginForm(Model model) {
-        model.addAttribute("user", new RegistrationDto());
+        model.addAttribute("user", new LoginDto());
         return "login";
     }
 
     @PostMapping("/verify-email")
-    public String verifyEmail(@Valid @ModelAttribute("user") EmailVerifyDto emailVerifyDto, Model model) {
+    public String verifyEmail(@Valid @ModelAttribute("user") EmailVerifyDto emailVerifyDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("user", emailVerifyDto);
+            return "verify-email";
+        }
+
         userService.verifyEmail(emailVerifyDto, model);
         return "redirect:/index?success";
+    }
+
+    @GetMapping("/index")
+    public String categoryList(Model model) {
+        userService.userForFrontEnd(model);
+        List<CategoryDto> categories = categoryService.findAllCategories();
+        model.addAttribute("categories", categories);
+        return "index";
     }
 }
