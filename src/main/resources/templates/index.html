@@ -36,14 +36,15 @@
                 </div>
                 <div th:each="category : ${categories}" class="col-lg-6 mb-2">
                     <div class="position-relative mb-3">
-                        <a th:text="${category.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link"
-                           href="#!">Categories</a>
+                        <a th:href="@{/category/{categoryId}(categoryId=${category.id})}"
+                           th:text="${category.name}"
+                           class="h3 fw-bolder text-decoration-none link-dark stretched-link">
+                        </a>
                     </div>
                     <a class="btn btn-primary"
                        th:href="@{/category/{categoryId}/edit(categoryId=${category.id})}">Edit</a>
                     <a class="btn btn-danger"
                        th:href="@{/category/{categoryId}/delete(categoryId=${category.id})}">Delete</a>
-
                 </div>
             </div>
         </div>
