@@ -1,6 +1,5 @@
 package fast_food_website.controller;
 
-import fast_food_website.entity.Category;
 import fast_food_website.payload.CategoryDto;
 import fast_food_website.service.CategoryService;
 import fast_food_website.service.UserService;
@@ -50,13 +49,12 @@ public class CategoryController {
     @PostMapping("/category/{categoryId}/edit")
     public String editClub(@PathVariable("categoryId") long categoryId,
                            @Valid @ModelAttribute("category") CategoryDto categoryDto,
-                           BindingResult result) {
+                           BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "category-edit";
         }
         categoryDto.setId(categoryId);
-        categoryService.editCategory(categoryDto);
-        return "redirect:/";
+        return categoryService.editCategory(categoryDto,model);
     }
 
     @GetMapping("/category/{categoryId}/delete")

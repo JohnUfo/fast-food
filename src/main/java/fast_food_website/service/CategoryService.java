@@ -13,7 +13,7 @@ public interface CategoryService {
 
     CategoryDto findCategoryById(long categoryId);
 
-    void editCategory(@Valid CategoryDto categoryDto);
+    String editCategory(@Valid CategoryDto categoryDto,Model model);
 
     void delete(long categoryId);
 

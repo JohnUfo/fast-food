@@ -44,13 +44,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void editCategory(CategoryDto categoryDto) {
+    public String editCategory(CategoryDto categoryDto,Model model) {
+        boolean existsByName = categoryRepository.existsByName(categoryDto.getName());
+        if (existsByName){
+            model.addAttribute("message", "Category already exists");
+            return "category-edit";
+        }
         Optional<Category> optionalCategory = categoryRepository.findById(categoryDto.getId());
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             category.setName(categoryDto.getName());
             categoryRepository.save(category);
         }
+        return "redirect:/";
     }
 
     private Category mapToCategory(CategoryDto categoryDto) {

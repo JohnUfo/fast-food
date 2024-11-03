@@ -12,6 +12,9 @@
 <main class="flex-shrink-0">
     <section layout:fragment="body" class="py-5">
         <div class="container">
+            <div th:if="${message}" class="alert alert-danger">
+                <p th:text="${message}"></p>
+            </div>
             <form role="form" method="post" th:action="@{/category/{categoryId}/edit(categoryId=${category.id})}"
                   th:object="${category}">
                 <input type="hidden" th:field="*{id}">
@@ -29,13 +32,12 @@
                         </div>
                     </div>
                     <br>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                        <a class="btn btn-dark" th:href="@{/}">Go Back</a>
+                    </div>
                 </div>
             </form>
-            <br>
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Edit</button>
-                <a class="btn btn-dark" th:href="@{/}">Go Back</a>
-            </div>
         </div>
     </section>
 </main>
