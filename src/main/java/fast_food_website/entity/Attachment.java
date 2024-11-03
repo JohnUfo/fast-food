@@ -1,35 +1,27 @@
 package fast_food_website.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import fast_food_website.entity.template.AbsEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Attachment extends AbsEntity {
+@AllArgsConstructor
+public class Attachment {
 
-    @Column(nullable = false)
-    private String fileOriginalName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false)
-    private long size;
+    private String fileName;
 
-    @Column(nullable = false)
-    private String contentType;
+    private String fileType;
 
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private AttachmentContent attachmentContent;
-
+    @Lob
+    @Column(name = "data", columnDefinition = "BLOB")
+    private byte[] data;
 }

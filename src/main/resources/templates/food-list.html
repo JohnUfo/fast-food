@@ -23,30 +23,26 @@
                 You are registered successfully!
             </div>
             <div class="text-center mb-5">
-                <h1 class="fw-bolder">Find Food Category</h1>
-                <p class="lead fw-normal text-muted mb-0">Foods you might like</p>
+                <h1 class="fw-bolder">Find Running Clubs</h1>
+                <p class="lead fw-normal text-muted mb-0">Groups of passionate near you</p>
             </div>
             <div class="row gx-5">
                 <div>
-                    <form th:action="@{/category/search}" class="form-inline my-2 my-lg-0 mb-3">
+                    <form th:action="@{/food/search}" class="form-inline my-2 my-lg-0 mb-3">
                         <input name="query" class="form-control mr-sm-2 mb-5" type="search"
-                               placeholder="Search food category" aria-label="Search">
+                               placeholder="Search running clubs" aria-label="Search">
                     </form>
-                    <a class="btn btn-success mb-4" th:href="@{/category/create}">Create New Category</a>
                 </div>
-                <div th:each="category : ${categories}" class="col-lg-6 mb-2">
+                <div th:each="food : ${foods}" class="col-lg-6 mb-2">
                     <div class="position-relative mb-3">
-                        <a th:href="@{/food/{categoryId}(categoryId=${category.id})}"
-                           th:text="${category.name}"
-                           class="h3 fw-bolder text-decoration-none link-dark stretched-link">
-                        </a>
+                        <img class="img-fluid rounded-3 mb-3 fixed-size-image" th:src="${food.photo}" alt="..."/>
+                        <a th:text="${food.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link"
+                           href="#!"></a>
                     </div>
-                    <a class="btn btn-primary"
-                       th:href="@{/category/{categoryId}/edit(categoryId=${category.id})}">Edit</a>
-                    <a class="btn btn-danger"
-                       th:href="@{/category/{categoryId}/delete(categoryId=${category.id})}">Delete</a>
-                    <a class="btn btn-warning"
-                       th:href="@{/food/{categoryId}/create(categoryId=${category.id})}">Add Food</a>
+<!--                    <a class="btn btn-primary" th:href="@{/clubs/{clubId}(clubId=${club.id})}">View</a>-->
+<!--                    <div th:if="${user.id}==${club.createdBy.id}">-->
+<!--                        <a class="btn btn-primary" th:href="@{/clubs/{clubId}/edit(clubId=${club.id})}">Edit</a>-->
+                    </div>
                 </div>
             </div>
         </div>

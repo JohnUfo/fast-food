@@ -1,6 +1,5 @@
 package fast_food_website.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import fast_food_website.entity.template.AbsEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +13,7 @@ import lombok.*;
 public class Food extends AbsEntity {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Attachment file;
+    private Attachment photo;
 
     @Column(nullable = false, unique = true)
     private String name;
