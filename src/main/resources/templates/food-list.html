@@ -35,15 +35,13 @@
                 </div>
                 <div th:each="food : ${foods}" class="col-lg-6 mb-2">
                     <div class="position-relative mb-3">
-                        <img class="img-fluid rounded-3 mb-3 fixed-size-image" th:src="${food.photo}" alt="..."/>
+                        <img class="img-fluid rounded-3 mb-3 fixed-size-image"
+                             th:src="@{/image/{foodId}(foodId=${food.id})}" alt=""/>
                         <a th:text="${food.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link"
                            href="#!"></a>
                     </div>
-<!--                    <a class="btn btn-primary" th:href="@{/clubs/{clubId}(clubId=${club.id})}">View</a>-->
-<!--                    <div th:if="${user.id}==${club.createdBy.id}">-->
-<!--                        <a class="btn btn-primary" th:href="@{/clubs/{clubId}/edit(clubId=${club.id})}">Edit</a>-->
-                    </div>
                 </div>
+
             </div>
         </div>
     </section>
