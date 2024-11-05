@@ -32,7 +32,8 @@ public class FoodController {
     }
 
     @GetMapping("/food/{categoryId}/create")
-    public String createCategory(Model model) {
+    public String createCategory(Model model,
+                                 @PathVariable("categoryId") Long categoryId) {
         userService.userForFrontEnd(model);
         model.addAttribute("food", new FoodDto());
         return "food-create";
@@ -47,6 +48,7 @@ public class FoodController {
         if (result.hasErrors()) {
             model.addAttribute("categoryId", categoryId);
             model.addAttribute("food", foodDto);
+            model.addAttribute("categoryId",categoryId);
             return "food-create";
         }
         return foodService.saveFood(foodDto, foodDto.getPhoto(), model, categoryId);
