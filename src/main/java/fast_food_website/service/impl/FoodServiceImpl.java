@@ -2,13 +2,14 @@ package fast_food_website.service.impl;
 
 
 import fast_food_website.entity.Attachment;
-import fast_food_website.entity.Category;
+import fast_food_website.entity.AttachmentContent;
 import fast_food_website.entity.Food;
 import fast_food_website.payload.FoodDto;
 import fast_food_website.repository.AttachmentRepository;
 import fast_food_website.repository.CategoryRepository;
 import fast_food_website.repository.FoodRepository;
 import fast_food_website.service.FoodService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -35,23 +36,40 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<FoodDto> getFoodsByCategoryId(Long categoryId) {
-        return foodRepository.findByCategoryId(categoryId).stream().map(food -> mapToFoodDto(food)).collect(Collectors.toList());
+        return foodRepository.findByCategoryId(categoryId).stream().map(this::mapToFoodDto).collect(Collectors.toList());
     }
 
     @Override
-    public String saveFood(FoodDto foodDto, MultipartFile photo, Model model, Long categoryId) throws IOException {
-        String fileName = photo.getOriginalFilename();
-        String fileType = photo.getContentType();
-        byte[] data = photo.getBytes();
+    @Transactional
+    public String saveFood(FoodDto foodDto, MultipartFile file, Model model, Long categoryId) throws IOException {
+        boolean existsByName = foodRepository.existsByName(foodDto.getName());
+        if (existsByName) {
+            model.addAttribute("message","Food already exists");
+            return "food-create";
+        }
 
-        Attachment attachment = new Attachment(null,fileName, fileType, data);
-        attachmentRepository.save(attachment);
+        Attachment attachment = null;
 
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        if (file != null && !file.isEmpty()) {
+            attachment = new Attachment();
+            attachment.setFileOriginalName(file.getOriginalFilename());
+            attachment.setSize(file.getSize());
+            attachment.setContentType(file.getContentType());
+            attachment.setName("uniqueFileName_" + System.currentTimeMillis());
 
-        Food food = new Food(foodDto.getName(), foodDto.getPrice(), foodDto.getDescription(), category);
-        food.setPhoto(attachment);
+            AttachmentContent attachmentContent = new AttachmentContent();
+            attachmentContent.setBytes(file.getBytes());
+            attachmentContent.setAttachment(attachment);
+            attachment.setAttachmentContent(attachmentContent);
+            attachment = attachmentRepository.save(attachment);
+        }
+
+        Food food = new Food();
+        food.setName(foodDto.getName());
+        food.setPrice(foodDto.getPrice());
+        food.setDescription(foodDto.getDescription());
+        food.setFile(attachment);
+        food.setCategory(categoryRepository.findById(categoryId).orElseThrow());
 
         foodRepository.save(food);
         return "redirect:/food/" + food.getCategory().getId();
@@ -64,7 +82,7 @@ public class FoodServiceImpl implements FoodService {
                 .price(food.getPrice())
                 .description(food.getDescription())
                 .category(food.getCategory())
-                .photo(food.getPhoto())
+                .attachment(food.getFile())
                 .build();
     }
 }
